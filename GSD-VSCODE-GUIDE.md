@@ -70,7 +70,7 @@ Copy the `.github/` directory from this repository to your project:
 
 ### Step 3: Verify
 
-Open VS Code in your project. In Copilot Chat (Agent mode), type `#` and you should see the `gsd-*` prompt files listed.
+Open VS Code in your project. In Copilot Chat (Agent mode), type `/` and you should see the `gsd-*` prompt files listed.
 
 Test the CLI tool:
 ```powershell
@@ -85,20 +85,20 @@ node .claude/get-shit-done/bin/gsd-tools.js init new-project
 
 | Claude Code (original) | VS Code / Copilot (adapted) |
 |---|---|
-| `/gsd:new-project` | Type `#gsd-new-project` in Chat |
-| `/gsd:plan-phase 3` | Type `#gsd-plan-phase` then say "Phase 3" |
-| `/gsd:execute-phase 1` | Type `#gsd-execute-phase` then say "Phase 1" |
-| `/gsd:quick` | Type `#gsd-quick` then describe the task |
-| `/gsd:progress` | Type `#gsd-progress` |
+| `/gsd:new-project` | Type `/gsd-new-project` in Chat |
+| `/gsd:plan-phase 3` | Type `/gsd-plan-phase` then say "Phase 3" |
+| `/gsd:execute-phase 1` | Type `/gsd-execute-phase` then say "Phase 1" |
+| `/gsd:quick` | Type `/gsd-quick` then describe the task |
+| `/gsd:progress` | Type `/gsd-progress` |
 
 ### Typical Workflow
 
 ```
-1. #gsd-new-project        → Initialize project (questions, research, requirements, roadmap)
-2. #gsd-discuss-phase       → Shape how phase 1 should be built (optional but recommended)
-3. #gsd-plan-phase          → Create detailed execution plans for phase 1
-4. #gsd-execute-phase       → Execute the plans, commit each task
-5. #gsd-verify-work         → Test that it actually works
+1. /gsd-new-project        → Initialize project (questions, research, requirements, roadmap)
+2. /gsd-discuss-phase       → Shape how phase 1 should be built (optional but recommended)
+3. /gsd-plan-phase          → Create detailed execution plans for phase 1
+4. /gsd-execute-phase       → Execute the plans, commit each task
+5. /gsd-verify-work         → Test that it actually works
 6. Repeat 2-5 for each phase
 ```
 
@@ -142,7 +142,7 @@ node .claude/get-shit-done/bin/gsd-tools.js roadmap analyze
 
 | Claude Code | VS Code / Copilot |
 |---|---|
-| `/gsd:new-project` (slash command) | `#gsd-new-project` (prompt file) |
+| `/gsd:new-project` (slash command) | `/gsd-new-project` (prompt file) |
 | Commands auto-load frontmatter tools | Prompt files provide instructions that Copilot follows |
 | `$ARGUMENTS` passed inline | User provides arguments in the chat message |
 
@@ -151,7 +151,7 @@ node .claude/get-shit-done/bin/gsd-tools.js roadmap analyze
 | Claude Code | VS Code / Copilot |
 |---|---|
 | `SessionStart` hook checks for updates | No hooks — update manually with `npx get-shit-done-cc@latest` |
-| Statusline shows model + context usage | Not available in Copilot — use `#gsd-progress` instead |
+| Statusline shows model + context usage | Not available in Copilot — use `/gsd-progress` instead |
 
 ### 4. No Agent Definitions
 
@@ -188,7 +188,7 @@ node .claude/get-shit-done/bin/gsd-tools.js roadmap analyze
 |---|---|
 | 200k token context per subagent | Shared context within one chat session |
 | Context stays at ~30-40% during orchestration | Context grows as you work — start new chats for fresh context |
-| Explicit context budget management | Use shorter sessions and `#gsd-pause-work` / `#gsd-resume-work` |
+| Explicit context budget management | Use shorter sessions and `/gsd-pause-work` / `/gsd-resume-work` |
 
 ---
 
@@ -208,7 +208,7 @@ Despite the differences, the **core GSD methodology** is fully compatible:
 ## Tips for Best Results
 
 1. **Start new chat sessions often** — Context rot is real. Start a fresh chat for each plan execution.
-2. **Use `#gsd-pause-work` before ending** — Creates a handoff file so you can resume cleanly.
+2. **Use `/gsd-pause-work` before ending** — Creates a handoff file so you can resume cleanly.
 3. **Reference workflow files explicitly** — Tell Copilot "read `.claude/get-shit-done/workflows/new-project.md` and follow it step by step."
 4. **One plan per session** — For execute-phase, run one PLAN.md per chat session for best quality.
 5. **Use gsd-tools.js for state operations** — The CLI is deterministic and faster than having Copilot parse files manually.
@@ -220,18 +220,18 @@ Despite the differences, the **core GSD methodology** is fully compatible:
 
 | Action | Command |
 |---|---|
-| Initialize project | `#gsd-new-project` |
-| Discuss phase preferences | `#gsd-discuss-phase` → "Phase 1" |
-| Plan a phase | `#gsd-plan-phase` → "Phase 1" |
-| Execute plans | `#gsd-execute-phase` → "Phase 1" |
-| Verify results | `#gsd-verify-work` → "Phase 1" |
-| Check progress | `#gsd-progress` |
-| Quick ad-hoc task | `#gsd-quick` → describe task |
-| Debug an issue | `#gsd-debug` → describe problem |
-| Map existing code | `#gsd-map-codebase` |
-| Pause session | `#gsd-pause-work` |
-| Resume session | `#gsd-resume-work` |
-| Show all commands | `#gsd-help` |
+| Initialize project | `/gsd-new-project` |
+| Discuss phase preferences | `/gsd-discuss-phase` → "Phase 1" |
+| Plan a phase | `/gsd-plan-phase` → "Phase 1" |
+| Execute plans | `/gsd-execute-phase` → "Phase 1" |
+| Verify results | `/gsd-verify-work` → "Phase 1" |
+| Check progress | `/gsd-progress` |
+| Quick ad-hoc task | `/gsd-quick` → describe task |
+| Debug an issue | `/gsd-debug` → describe problem |
+| Map existing code | `/gsd-map-codebase` |
+| Pause session | `/gsd-pause-work` |
+| Resume session | `/gsd-resume-work` |
+| Show all commands | `/gsd-help` |
 
 ---
 

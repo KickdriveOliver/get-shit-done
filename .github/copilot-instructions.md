@@ -30,7 +30,7 @@ All GSD resources are installed locally at `.claude/get-shit-done/`:
 
 ### Available GSD Commands (via Prompt Files)
 
-Use `#` in Copilot Chat to reference these prompt files from `.github/prompts/`:
+Use `/` in Copilot Chat to invoke these prompt files from `.github/prompts/`:
 
 | Prompt File | Equivalent Claude Code Command | Purpose |
 |---|---|---|
@@ -50,7 +50,7 @@ Use `#` in Copilot Chat to reference these prompt files from `.github/prompts/`:
 ### Key Differences from Claude Code
 
 1. **No subagent spawning**: VS Code Copilot cannot spawn parallel subagents like Claude Code's `Task` tool. Execute plans sequentially within the same context.
-2. **No slash commands**: Instead of `/gsd:command`, use prompt files via `#` references in Copilot Chat.
+2. **No slash commands**: Instead of `/gsd:command`, use prompt files via `/gsd-command` in Copilot Chat.
 3. **No hooks**: Session hooks (update checks, statusline) don't apply in VS Code.
 4. **Manual workflow**: Read workflow files and follow them step-by-step rather than having them auto-execute via frontmatter routing.
 
