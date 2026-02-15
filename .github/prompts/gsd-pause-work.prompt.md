@@ -22,7 +22,7 @@ You are executing the GSD **pause-work** workflow. This creates a context handof
    - Any active decisions or blockers
 3. **Write `.continue-here.md`** — Handoff file with all context
 4. **Update STATE.md** — Record the pause point
-5. **Git commit** — `wip: pause work on phase N`
+5. **Git commit** — If `git.enabled` is `true` in `.planning/config.json`: `wip: pause work on phase N`. If `false`: skip this step
 
 **Creates:** `.continue-here.md` at project root
 

@@ -27,6 +27,10 @@ Also get plan inventory:
 node .claude/get-shit-done/bin/gsd-tools.js phase-plan-index <PHASE_NUMBER>
 ```
 
+## Git Behavior
+
+Read `.planning/config.json`. If `git.enabled` is `false` (or missing), **skip all git operations** (commits, branch creation, history checks). Just write files, track progress in STATE.md, and continue.
+
 ## Workflow
 
 1. **Discover plans** — Find all PLAN.md files in the phase directory
@@ -35,7 +39,8 @@ node .claude/get-shit-done/bin/gsd-tools.js phase-plan-index <PHASE_NUMBER>
    - Read the PLAN.md file
    - Execute each `<task>` in order
    - Run verification steps after each task
-   - Make atomic git commits per task: `feat(XX-YY): description`
+   - If `git.enabled`: make atomic git commits per task: `feat(XX-YY): description`
+   - If `git.enabled` is `false`: record task completion in STATE.md instead
    - Create SUMMARY.md when plan is complete
 4. **Update state** — Update STATE.md with completed work
 5. **Verify phase** — Check that phase goals were achieved
@@ -48,10 +53,12 @@ For each task in a plan:
 1. Read the task's `<action>` instructions
 2. Implement the code changes
 3. Run the task's `<verify>` command
-4. If verify passes → commit with atomic message
+4. If verify passes → commit with atomic message (**only if `git.enabled` is `true`**; otherwise just continue)
 5. If verify fails → debug and fix before moving on
 
 ## Git Commit Convention
+
+**Skip this section entirely if `git.enabled` is `false` in `.planning/config.json`.**
 
 ```
 feat(XX-YY): description    # Feature implementation
@@ -66,6 +73,6 @@ Where XX = phase number, YY = plan number.
 
 - Execute plans **one at a time, sequentially** (no parallel subagent spawning)
 - Keep context focused — read only the current plan's files
-- Commit after each task, not after all tasks
+- If `git.enabled`: commit after each task, not after all tasks. If `git.enabled` is `false`: skip commits entirely
 - If context gets large, suggest the user start a new chat for the next plan
 - After all plans complete, suggest running `gsd-verify-work` next

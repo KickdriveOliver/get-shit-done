@@ -2,6 +2,21 @@
 
 You are operating with the **GSD (Get Shit Done)** system — a meta-prompting, context engineering, and spec-driven development framework. Originally built for Claude Code, it has been adapted for VS Code with GitHub Copilot Agent mode.
 
+## Git Behavior Override
+
+**Before any git operation**, check `.planning/config.json` → `git.enabled`.
+
+If `git.enabled` is `false` (or the `git` key is missing):
+- **Do NOT run** any git commands (`git add`, `git commit`, `git push`, `git log`, `git diff`, `git status`, `git branch`, etc.)
+- **Do NOT suggest** commits or reference commit history
+- **Skip** all "commit per task" and "atomic commit" instructions in workflows and prompt files
+- Simply save files and move to the next task
+- Track completed tasks in `STATE.md` instead of relying on commit history
+- When a workflow step says "git commit", mark the task as done in `STATE.md` and continue
+
+If `git.enabled` is `true` (default when present):
+- Follow all git instructions in workflows as written
+
 ## System Overview
 
 GSD solves **context rot** — the quality degradation that happens as AI fills its context window. It does this through structured workflows, persistent state, and fresh-context execution patterns.
@@ -72,7 +87,9 @@ Key commands:
 
 ### Git Convention
 
-GSD uses atomic commits per task:
+**First check `.planning/config.json` → `git.enabled`.** If `false`, skip all git operations below.
+
+When git is enabled, GSD uses atomic commits per task:
 ```
 feat(08-02): implement user registration endpoint
 docs(08-02): complete phase 2 plan
@@ -87,4 +104,4 @@ Format: `type(phase): description`
 3. Follow the workflow steps in order — don't skip validation gates
 4. Create documents using the templates in `.claude/get-shit-done/templates/`
 5. Update `STATE.md` after completing significant work
-6. Make atomic git commits per task
+6. Make atomic git commits per task (**only if `git.enabled` is `true` in `.planning/config.json`**)

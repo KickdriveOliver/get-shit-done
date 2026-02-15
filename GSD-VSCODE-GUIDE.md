@@ -205,6 +205,30 @@ Despite the differences, the **core GSD methodology** is fully compatible:
 
 ---
 
+## Disabling Git Integration
+
+GSD can operate without any git commands. Set `git.enabled` to `false` in `.planning/config.json`:
+
+```json
+{
+  "git": {
+    "enabled": false,
+    "auto_commit": false,
+    "check_history": false
+  }
+}
+```
+
+When `git.enabled` is `false`:
+- No `git add`, `git commit`, `git push`, `git log`, `git diff`, `git status`, or `git branch` commands will be run
+- All "commit per task" workflow steps are skipped automatically
+- Progress is tracked in `STATE.md` instead of commit history
+- The planning/execution/verification workflow remains fully functional
+
+This is useful when you manage commits manually, work outside a git repo, or prefer to commit on your own terms.
+
+---
+
 ## Tips for Best Results
 
 1. **Start new chat sessions often** — Context rot is real. Start a fresh chat for each plan execution.
