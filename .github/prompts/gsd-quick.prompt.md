@@ -7,6 +7,10 @@ description: "GSD: Execute a quick ad-hoc task with state tracking"
 
 You are executing the GSD **quick** workflow. This handles small, ad-hoc tasks with GSD guarantees (STATE.md tracking, optional atomic commits) while skipping optional agents.
 
+## Flags
+
+- `--full` — Enables plan-checking (max 2 iterations) and post-execution verification. Use when you want quality guarantees without full milestone ceremony.
+
 ## Git Behavior
 
 Read `.planning/config.json`. If `git.enabled` is `false` (or missing), **skip all git operations**. Just write files and track progress in STATE.md.
@@ -19,7 +23,7 @@ Read `.planning/config.json`. If `git.enabled` is `false` (or missing), **skip a
 ## Initialize
 
 ```bash
-node .claude/get-shit-done/bin/gsd-tools.js state load
+node .claude/get-shit-done/bin/gsd-tools.cjs state load
 ```
 
 ## Workflow

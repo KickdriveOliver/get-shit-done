@@ -7,6 +7,10 @@ description: "GSD: Initialize a new project — questioning → research → req
 
 You are executing the GSD **new-project** workflow. This initializes a new project through a structured flow.
 
+## Flags
+
+- `--auto` — Automatic mode. After config questions, runs research → requirements → roadmap without further interaction. Expects idea document via @ reference.
+
 ## Before Starting
 
 1. Read the workflow: `.claude/get-shit-done/workflows/new-project.md`
@@ -18,7 +22,7 @@ You are executing the GSD **new-project** workflow. This initializes a new proje
 
 Run in terminal:
 ```bash
-node .claude/get-shit-done/bin/gsd-tools.js init new-project
+node .claude/get-shit-done/bin/gsd-tools.cjs init new-project
 ```
 
 Parse the JSON output for project state and config.

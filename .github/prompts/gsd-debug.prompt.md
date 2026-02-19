@@ -15,7 +15,7 @@ You are executing the GSD **debug** workflow. This provides systematic debugging
 ## Initialize
 
 ```bash
-node .claude/get-shit-done/bin/gsd-tools.js state load
+node .claude/get-shit-done/bin/gsd-tools.cjs state load
 ```
 
 ## Workflow

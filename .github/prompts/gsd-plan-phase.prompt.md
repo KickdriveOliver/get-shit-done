@@ -7,6 +7,14 @@ description: "GSD: Create detailed execution plans for a roadmap phase"
 
 You are executing the GSD **plan-phase** workflow. This creates executable task plans for a phase.
 
+## Flags
+
+- `--auto` — Automatic mode. Chains discuss → plan → execute without stopping
+- `--research` — Force re-research even if RESEARCH.md exists
+- `--skip-research` — Skip research, go straight to planning
+- `--gaps` — Gap closure mode (reads VERIFICATION.md, skips research)
+- `--skip-verify` — Skip verification loop
+
 ## Setup
 
 1. Read the workflow: `.claude/get-shit-done/workflows/plan-phase.md`
@@ -17,7 +25,7 @@ You are executing the GSD **plan-phase** workflow. This creates executable task 
 
 Run in terminal:
 ```bash
-node .claude/get-shit-done/bin/gsd-tools.js init execute-phase <PHASE_NUMBER>
+node .claude/get-shit-done/bin/gsd-tools.cjs init execute-phase <PHASE_NUMBER>
 ```
 
 ## Workflow

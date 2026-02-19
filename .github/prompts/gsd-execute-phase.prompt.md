@@ -7,6 +7,10 @@ description: "GSD: Execute all plans in a phase sequentially"
 
 You are executing the GSD **execute-phase** workflow. This runs all plans for a phase.
 
+## Flags
+
+- `--gaps-only` — Execute only gap closure plans (plans with `gap_closure: true` in frontmatter). Use after verify-work creates fix plans.
+
 ## Setup
 
 1. Read the workflow: `.claude/get-shit-done/workflows/execute-phase.md`
@@ -17,14 +21,14 @@ You are executing the GSD **execute-phase** workflow. This runs all plans for a 
 
 Run in terminal:
 ```bash
-node .claude/get-shit-done/bin/gsd-tools.js init execute-phase <PHASE_NUMBER>
+node .claude/get-shit-done/bin/gsd-tools.cjs init execute-phase <PHASE_NUMBER>
 ```
 
 Parse JSON for: phase_dir, plans, incomplete_plans, commit_docs.
 
 Also get plan inventory:
 ```bash
-node .claude/get-shit-done/bin/gsd-tools.js phase-plan-index <PHASE_NUMBER>
+node .claude/get-shit-done/bin/gsd-tools.cjs phase-plan-index <PHASE_NUMBER>
 ```
 
 ## Git Behavior

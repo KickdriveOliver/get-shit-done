@@ -17,12 +17,12 @@ You are executing the GSD **progress** workflow. This shows where the project st
 
 Run in terminal:
 ```bash
-node .claude/get-shit-done/bin/gsd-tools.js progress
+node .claude/get-shit-done/bin/gsd-tools.cjs progress
 ```
 
 Also check roadmap analysis:
 ```bash
-node .claude/get-shit-done/bin/gsd-tools.js roadmap analyze
+node .claude/get-shit-done/bin/gsd-tools.cjs roadmap analyze
 ```
 
 ## Workflow

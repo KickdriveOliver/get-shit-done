@@ -32,12 +32,13 @@ In VS Code, GSD commands are available as **prompt files**. Use them by typing `
 | `#gsd-map-codebase` | Analyze existing codebase |
 | `#gsd-pause-work` | Create handoff for session break |
 | `#gsd-resume-work` | Resume from previous session |
+| `#gsd-health` | Validate planning directory |
 
 ### Key Differences from Claude Code
 
 1. **No subagents** — Plans execute sequentially in one context
 2. **No slash commands** — Use `#prompt-name` instead of `/gsd:command`
-3. **gsd-tools.js** — Still works via terminal: `node .claude/get-shit-done/bin/gsd-tools.js <command>`
+3. **gsd-tools.cjs** — Still works via terminal: `node .claude/get-shit-done/bin/gsd-tools.cjs <command>`
 4. **Manual workflow** — Follow workflow steps in the referenced `.md` files
 
 ### Typical Workflow

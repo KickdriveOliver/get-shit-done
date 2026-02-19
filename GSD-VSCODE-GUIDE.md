@@ -38,7 +38,7 @@ This creates a `.claude/` directory in your project with:
 .claude/
 ├── commands/gsd/        # Command definitions (slash commands for Claude Code)
 ├── get-shit-done/       # Core system
-│   ├── bin/             # gsd-tools.js CLI
+│   ├── bin/             # gsd-tools.cjs CLI
 │   ├── workflows/       # Step-by-step process definitions
 │   ├── templates/       # Document templates
 │   └── references/      # Guidelines and patterns
@@ -65,6 +65,7 @@ Copy the `.github/` directory from this repository to your project:
     ├── gsd-map-codebase.prompt.md
     ├── gsd-pause-work.prompt.md
     ├── gsd-resume-work.prompt.md
+    ├── gsd-health.prompt.md
     └── gsd-help.prompt.md
 ```
 
@@ -74,7 +75,7 @@ Open VS Code in your project. In Copilot Chat (Agent mode), type `/` and you sho
 
 Test the CLI tool:
 ```powershell
-node .claude/get-shit-done/bin/gsd-tools.js init new-project
+node .claude/get-shit-done/bin/gsd-tools.cjs init new-project
 ```
 
 ---
@@ -102,25 +103,25 @@ node .claude/get-shit-done/bin/gsd-tools.js init new-project
 6. Repeat 2-5 for each phase
 ```
 
-### Using gsd-tools.js
+### Using gsd-tools.cjs
 
 The CLI helper works identically on Windows. Run from the VS Code terminal:
 
 ```powershell
 # Check project init state
-node .claude/get-shit-done/bin/gsd-tools.js init new-project
+node .claude/get-shit-done/bin/gsd-tools.cjs init new-project
 
 # Load project state
-node .claude/get-shit-done/bin/gsd-tools.js state load
+node .claude/get-shit-done/bin/gsd-tools.cjs state load
 
 # Check progress
-node .claude/get-shit-done/bin/gsd-tools.js progress
+node .claude/get-shit-done/bin/gsd-tools.cjs progress
 
 # Validate consistency
-node .claude/get-shit-done/bin/gsd-tools.js validate consistency
+node .claude/get-shit-done/bin/gsd-tools.cjs validate consistency
 
 # Analyze roadmap
-node .claude/get-shit-done/bin/gsd-tools.js roadmap analyze
+node .claude/get-shit-done/bin/gsd-tools.cjs roadmap analyze
 ```
 
 ---
@@ -197,7 +198,7 @@ node .claude/get-shit-done/bin/gsd-tools.js roadmap analyze
 Despite the differences, the **core GSD methodology** is fully compatible:
 
 - **`.planning/` directory structure** — Same files, same templates, same format
-- **gsd-tools.js CLI** — All commands work on Windows
+- **gsd-tools.cjs CLI** — All commands work on Windows
 - **Git integration** — Atomic commits, branch strategies, conventional commit format
 - **Templates** — PROJECT.md, REQUIREMENTS.md, ROADMAP.md, STATE.md, PLAN.md, SUMMARY.md
 - **Workflows** — The `.md` workflow files are readable instructions that any AI can follow
@@ -235,7 +236,7 @@ This is useful when you manage commits manually, work outside a git repo, or pre
 2. **Use `/gsd-pause-work` before ending** — Creates a handoff file so you can resume cleanly.
 3. **Reference workflow files explicitly** — Tell Copilot "read `.claude/get-shit-done/workflows/new-project.md` and follow it step by step."
 4. **One plan per session** — For execute-phase, run one PLAN.md per chat session for best quality.
-5. **Use gsd-tools.js for state operations** — The CLI is deterministic and faster than having Copilot parse files manually.
+5. **Use gsd-tools.cjs for state operations** — The CLI is deterministic and faster than having Copilot parse files manually.
 6. **Keep plans small** — Since there's no fresh-context-per-subagent, smaller plans = better results.
 
 ---
@@ -255,6 +256,7 @@ This is useful when you manage commits manually, work outside a git repo, or pre
 | Map existing code | `/gsd-map-codebase` |
 | Pause session | `/gsd-pause-work` |
 | Resume session | `/gsd-resume-work` |
+| Check planning health | `/gsd-health` |
 | Show all commands | `/gsd-help` |
 
 ---
@@ -265,7 +267,7 @@ This is useful when you manage commits manually, work outside a git repo, or pre
 your-project/
 ├── .claude/
 │   ├── get-shit-done/          # GSD core system
-│   │   ├── bin/gsd-tools.js    # CLI helper
+│   │   ├── bin/gsd-tools.cjs    # CLI helper
 │   │   ├── workflows/          # Process definitions
 │   │   ├── templates/          # Document templates
 │   │   └── references/         # Guidelines
@@ -274,7 +276,7 @@ your-project/
 ├── .github/
 │   ├── copilot-instructions.md # Copilot custom instructions
 │   └── prompts/                # Prompt files for GSD commands
-│       └── gsd-*.prompt.md     # 12 prompt files
+       └── gsd-*.prompt.md     # 13 prompt files
 ├── .planning/                  # Created by GSD during project init
 │   ├── PROJECT.md
 │   ├── config.json

@@ -29,7 +29,7 @@ All GSD resources are installed locally at `.claude/get-shit-done/`:
 - **Workflows**: `.claude/get-shit-done/workflows/` — Step-by-step process definitions
 - **Templates**: `.claude/get-shit-done/templates/` — Document templates
 - **References**: `.claude/get-shit-done/references/` — Guidelines and patterns
-- **Tools**: `.claude/get-shit-done/bin/gsd-tools.js` — CLI helper for state management
+- **Tools**: `.claude/get-shit-done/bin/gsd-tools.cjs` — CLI helper for state management
 
 ### Project State (`.planning/` directory)
 
@@ -60,6 +60,7 @@ Use `/` in Copilot Chat to invoke these prompt files from `.github/prompts/`:
 | `gsd-map-codebase.prompt.md` | `/gsd:map-codebase` | Analyze existing codebase |
 | `gsd-pause-work.prompt.md` | `/gsd:pause-work` | Create handoff for session break |
 | `gsd-resume-work.prompt.md` | `/gsd:resume-work` | Resume from previous session |
+| `gsd-health.prompt.md` | `/gsd:health` | Validate planning directory |
 | `gsd-help.prompt.md` | `/gsd:help` | Show command reference |
 
 ### Key Differences from Claude Code
@@ -69,12 +70,12 @@ Use `/` in Copilot Chat to invoke these prompt files from `.github/prompts/`:
 3. **No hooks**: Session hooks (update checks, statusline) don't apply in VS Code.
 4. **Manual workflow**: Read workflow files and follow them step-by-step rather than having them auto-execute via frontmatter routing.
 
-### Using gsd-tools.js
+### Using gsd-tools.cjs
 
 The GSD CLI helper provides deterministic operations. Run via terminal:
 
 ```bash
-node .claude/get-shit-done/bin/gsd-tools.js <command> [args]
+node .claude/get-shit-done/bin/gsd-tools.cjs <command> [args]
 ```
 
 Key commands:
