@@ -1,5 +1,5 @@
 ---
-mode: agent
+agent: 'agent'
 description: "GSD: Create detailed execution plans for a roadmap phase"
 ---
 

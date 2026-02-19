@@ -1,5 +1,5 @@
 ---
-mode: agent
+agent: 'agent'
 description: "GSD: Check project progress and route to next action"
 ---
 

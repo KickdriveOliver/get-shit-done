@@ -1,5 +1,5 @@
 ---
-mode: agent
+agent: 'agent'
 description: "GSD: Create handoff file when pausing mid-session"
 ---
 

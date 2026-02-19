@@ -1,5 +1,5 @@
 ---
-mode: agent
+agent: 'agent'
 description: "GSD: Resume work from a previous session"
 ---
 

@@ -1441,7 +1441,7 @@ function cmdResolveModel(cwd, agentType, raw) {
 
   const agentModels = MODEL_PROFILES[agentType];
   if (!agentModels) {
-    const result = { model: 'sonnet', profile, unknown_agent: true };
+    const result = { model: 'sonnet', profile, unknown_agent: 'agent' };
     output(result, raw, 'sonnet');
     return;
   }

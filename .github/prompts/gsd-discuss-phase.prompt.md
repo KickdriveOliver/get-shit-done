@@ -1,5 +1,5 @@
 ---
-mode: agent
+agent: 'agent'
 description: "GSD: Discuss phase implementation preferences before planning"
 ---
 

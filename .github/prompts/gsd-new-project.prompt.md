@@ -1,5 +1,5 @@
 ---
-mode: agent
+agent: 'agent'
 description: "GSD: Initialize a new project — questioning → research → requirements → roadmap"
 ---
 

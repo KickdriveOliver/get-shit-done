@@ -1,5 +1,5 @@
 ---
-mode: agent
+agent: 'agent'
 description: "GSD: Execute all plans in a phase sequentially"
 ---
 

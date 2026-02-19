@@ -1,5 +1,5 @@
 ---
-mode: agent
+agent: 'agent'
 description: "GSD: Analyze existing codebase to produce structured documentation"
 ---
 

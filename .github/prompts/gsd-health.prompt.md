@@ -1,5 +1,5 @@
 ---
-mode: agent
+agent: 'agent'
 description: "GSD: Validate planning directory health and optionally repair issues"
 ---
 

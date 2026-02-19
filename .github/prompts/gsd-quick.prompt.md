@@ -1,5 +1,5 @@
 ---
-mode: agent
+agent: 'agent'
 description: "GSD: Execute a quick ad-hoc task with state tracking"
 ---
 
