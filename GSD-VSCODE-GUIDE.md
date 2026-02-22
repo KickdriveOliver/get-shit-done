@@ -1,20 +1,9 @@
 # GSD for VS Code + GitHub Copilot — Setup & Usage Guide
 
-This guide explains how to use **GSD (Get Shit Done)** within **VS Code with GitHub Copilot (Agent Mode)** on **Windows**, and how it differs from the original Claude Code experience.
+> [!WARNING] 
+> This is not the original [GSD](https://github.com/glittercowboy/get-shit-done) repo, but an experimental feature, built for personal use with VS Code / Github Copilot Pro on Windows. 
 
----
-
-## What is GSD?
-
-GSD is a **meta-prompting, context engineering, and spec-driven development framework** that solves *context rot* — the quality degradation that happens as an AI fills its context window. It provides:
-
-- **Structured project initialization** — Deep questioning → research → requirements → roadmap
-- **Phase-based execution** — Atomic plans executed with fresh context
-- **Persistent state** — `.planning/` directory tracks everything across sessions
-- **Git integration** — Atomic commits per task with traceable history
-- **Templates & workflows** — Opinionated structure that keeps AI output consistent
-
-Originally built for [Claude Code](https://github.com/glittercowboy/get-shit-done) (a terminal-based AI coding tool), it has been adapted here for VS Code.
+This guide explains how to use **GSD (Get Shit Done)** within **VS Code with GitHub Copilot (Agent Mode)** on **Windows**, and how it differs from the original [GSD on Claude Code](https://github.com/glittercowboy/get-shit-done) experience.
 
 ---
 
@@ -25,7 +14,7 @@ Originally built for [Claude Code](https://github.com/glittercowboy/get-shit-don
 - **VS Code** with **GitHub Copilot** (Pro/Business/Enterprise with Agent mode)
 - **Git** installed and available on PATH
 
-### Step 1: Install GSD Locally
+### Step 1: Install GSD Locally in your VS Code workspace
 
 From any project where you want to use GSD:
 
@@ -206,9 +195,12 @@ Despite the differences, the **core GSD methodology** is fully compatible:
 
 ---
 
-## Disabling Git Integration
+## Disabling Git Integration in GSD for VS Code
 
-GSD can operate without any git commands. Set `git.enabled` to `false` in `.planning/config.json`:
+> [!WARNING] 
+> These options are *not* supported in the original [GSD](https://github.com/glittercowboy/get-shit-done) release.
+
+GSD-VSCODE can operate without any git commands. Set `git.enabled` to `false` in `.planning/config.json`:
 
 ```json
 {
