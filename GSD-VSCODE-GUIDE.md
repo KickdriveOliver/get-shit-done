@@ -1,7 +1,7 @@
 # GSD for VS Code + GitHub Copilot — Setup & Usage Guide
 
 > [!WARNING] 
-> This is not the original [GSD](https://github.com/glittercowboy/get-shit-done) repo, but an experimental feature, built for personal use with VS Code / Github Copilot Pro on Windows. 
+> This is not the original [GSD](https://github.com/glittercowboy/get-shit-done) repo, but an experimental feature, built for personal use with VS Code / GitHub Copilot Pro on Windows. 
 
 This guide explains how to use **GSD (Get Shit Done)** within **VS Code with GitHub Copilot (Agent Mode)** on **Windows**, and how it differs from the original [GSD on Claude Code](https://github.com/glittercowboy/get-shit-done) experience.
 
@@ -10,16 +10,34 @@ This guide explains how to use **GSD (Get Shit Done)** within **VS Code with Git
 ## Installation (Windows + VS Code)
 
 ### Prerequisites
-- **Node.js** (v16.7+) — available via `C:\Program Files\nodejs`
+
 - **VS Code** with **GitHub Copilot** (Pro/Business/Enterprise with Agent mode)
-- **Git** installed and available on PATH
 
-### Step 1: Install GSD Locally in your VS Code workspace
+### Step 1: Install Node.js (v16.7+)
 
-From any project where you want to use GSD:
+- Install **Node.js** (v16.7+). E.g. get a pre-built Windows Installer .msi from [Download Node.js®](https://nodejs.org/en/download). 
 
-```powershell
-npx get-shit-done-cc@latest --claude --local
+Note: The Node.js installer has a "Tools for Native Modules - Automatically install the necessary tools" checkbox option. This is not needed if you are only using Node.js to run GSD.
+
+- Confirm that `node` and `npm` can be run from a `cmd` terminal prompt in your VS Code workspace, e.g. 
+
+```cmd
+E:\dev\test>node -v
+v24.14.0
+
+E:\dev\test>npm -v
+11.9.0
+```
+
+### Step 2: Install GSD Locally in your VS Code workspace
+
+In the workspace where you want to use GSD-VSCODE[^1], run the following command from a `cmd` terminal window:
+
+```cmd
+E:\dev\test>npx get-shit-done-cc@1.20.4 --claude --local
+Need to install the following packages:
+get-shit-done-cc@1.20.4
+Ok to proceed? (y) y
 ```
 
 This creates a `.claude/` directory in your project with:
@@ -35,9 +53,11 @@ This creates a `.claude/` directory in your project with:
 └── settings.json        # Claude Code settings (not used by Copilot)
 ```
 
-### Step 2: Add Copilot Integration Files
+[^1]: The original GSD `README.md` uses `npx get-shit-done-cc@latest` for installation, but this VSCODE variant intentionally freezes to a specific GSD version, since the copilot prompt files are generated/updated in a manual step and only infrequently.
 
-Copy the `.github/` directory from this repository to your project:
+### Step 3: Add Copilot Integration Files
+
+Copy the `.github/prompts` folder and the `.github/copilot-instructions.md` file from this repository to your project:
 
 ```
 .github/
@@ -58,14 +78,9 @@ Copy the `.github/` directory from this repository to your project:
     └── gsd-help.prompt.md
 ```
 
-### Step 3: Verify
+### Step 4: Verify
 
-Open VS Code in your project. In Copilot Chat (Agent mode), type `/` and you should see the `gsd-*` prompt files listed.
-
-Test the CLI tool:
-```powershell
-node .claude/get-shit-done/bin/gsd-tools.cjs init new-project
-```
+In Copilot Chat (Agent mode), type `/` and you should see now the `gsd-*` prompt files listed.
 
 ---
 
@@ -84,19 +99,20 @@ node .claude/get-shit-done/bin/gsd-tools.cjs init new-project
 ### Typical Workflow
 
 ```
-1. /gsd-new-project        → Initialize project (questions, research, requirements, roadmap)
-2. /gsd-discuss-phase       → Shape how phase 1 should be built (optional but recommended)
-3. /gsd-plan-phase          → Create detailed execution plans for phase 1
-4. /gsd-execute-phase       → Execute the plans, commit each task
-5. /gsd-verify-work         → Test that it actually works
-6. Repeat 2-5 for each phase
+1. /gsd-map-codebase      → Optional: Analyze existing codebase, if this is not a new project created from scratch
+2. /gsd-new-project        → Initialize project (questions, research, requirements, roadmap)
+3. /gsd-discuss-phase       → Shape how phase 1 should be built (optional but recommended)
+4. /gsd-plan-phase          → Create detailed execution plans for phase 1
+5. /gsd-execute-phase       → Execute the plans.
+6. /gsd-verify-work         → Test that it actually works
+7. Repeat 3-6 for each phase
 ```
 
 ### Using gsd-tools.cjs
 
 The CLI helper works identically on Windows. Run from the VS Code terminal:
 
-```powershell
+```cmd
 # Check project init state
 node .claude/get-shit-done/bin/gsd-tools.cjs init new-project
 
@@ -128,7 +144,7 @@ node .claude/get-shit-done/bin/gsd-tools.cjs roadmap analyze
 
 **Impact:** Execution is slower but still follows the same methodology. For large phases, consider starting a **new Copilot chat session** for each plan to get fresh context.
 
-### 2. No Slash Commands → Prompt Files
+### 2. Slash Commands via Prompt Files
 
 | Claude Code | VS Code / Copilot |
 |---|---|
