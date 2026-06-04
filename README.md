@@ -1,5 +1,15 @@
 <div align="center">
 
+# GSD Has Moved. 
+
+The project now continues as GSD Core in the Open GSD repository: https://github.com/open-gsd/gsd-core  Use the new repository for current source code, issues, releases, and contribution work.
+
+Original readme below, minus the untrusted install instructions via npx. 
+
+</div>
+
+<div align="center">
+
 # GET SHIT DONE
 
 **A light-weight and powerful meta-prompting, context engineering and spec-driven development system for Claude Code, OpenCode, and Gemini CLI.**
@@ -15,10 +25,6 @@
 [![License](https://img.shields.io/badge/license-MIT-blue?style=for-the-badge)](LICENSE)
 
 <br>
-
-```bash
-npx get-shit-done-cc@latest
-```
 
 **Works on Mac, Windows, and Linux.**
 
@@ -74,44 +80,18 @@ People who want to describe what they want and have it built correctly — witho
 
 ## Getting Started
 
-```bash
-npx get-shit-done-cc@latest
-```
-
-The installer prompts you to choose:
-1. **Runtime** — Claude Code, OpenCode, Gemini, or all
-2. **Location** — Global (all projects) or local (current project only)
-
-Verify with `/gsd:help` inside your chosen runtime.
+2026-06-04 REMOVED - ARCHIVED CONTENT FOR DOCUMENTATION PURPOSES ONLY
 
 ### Staying Updated
 
 GSD evolves fast. Update periodically:
 
-```bash
-npx get-shit-done-cc@latest
-```
+2026-06-04 REMOVED - ARCHIVED CONTENT FOR DOCUMENTATION PURPOSES ONLY
 
 <details>
 <summary><strong>Non-interactive Install (Docker, CI, Scripts)</strong></summary>
 
-```bash
-# Claude Code
-npx get-shit-done-cc --claude --global   # Install to ~/.claude/
-npx get-shit-done-cc --claude --local    # Install to ./.claude/
-
-# OpenCode (open source, free models)
-npx get-shit-done-cc --opencode --global # Install to ~/.config/opencode/
-
-# Gemini CLI
-npx get-shit-done-cc --gemini --global   # Install to ~/.gemini/
-
-# All runtimes
-npx get-shit-done-cc --all --global      # Install to all directories
-```
-
-Use `--global` (`-g`) or `--local` (`-l`) to skip the location prompt.
-Use `--claude`, `--opencode`, `--gemini`, or `--all` to skip the runtime prompt.
+2026-06-04 REMOVED - ARCHIVED CONTENT FOR DOCUMENTATION PURPOSES ONLY
 
 </details>
 
@@ -620,34 +600,24 @@ This prevents Claude from reading these files entirely, regardless of what comma
 
 **Commands not working as expected?**
 - Run `/gsd:help` to verify installation
-- Re-run `npx get-shit-done-cc` to reinstall
 
 **Updating to the latest version?**
-```bash
-npx get-shit-done-cc@latest
-```
+
+2026-06-04 REMOVED - ARCHIVED CONTENT FOR DOCUMENTATION PURPOSES ONLY
 
 **Using Docker or containerized environments?**
 
 If file reads fail with tilde paths (`~/.claude/...`), set `CLAUDE_CONFIG_DIR` before installing:
-```bash
-CLAUDE_CONFIG_DIR=/home/youruser/.claude npx get-shit-done-cc --global
-```
+
+2026-06-04 REMOVED - ARCHIVED CONTENT FOR DOCUMENTATION PURPOSES ONLY
+
 This ensures absolute paths are used instead of `~` which may not expand correctly in containers.
 
 ### Uninstalling
 
 To remove GSD completely:
 
-```bash
-# Global installs
-npx get-shit-done-cc --claude --global --uninstall
-npx get-shit-done-cc --opencode --global --uninstall
-
-# Local installs (current project)
-npx get-shit-done-cc --claude --local --uninstall
-npx get-shit-done-cc --opencode --local --uninstall
-```
+2026-06-04 REMOVED - ARCHIVED CONTENT FOR DOCUMENTATION PURPOSES ONLY
 
 This removes all GSD commands, agents, hooks, and settings while preserving your other configurations.
 
@@ -655,7 +625,9 @@ This removes all GSD commands, agents, hooks, and settings while preserving your
 
 ## Community Ports
 
-OpenCode and Gemini CLI are now natively supported via `npx get-shit-done-cc`.
+OpenCode and Gemini CLI are now natively supported via 
+
+(2026-06-04 REMOVED - ARCHIVED CONTENT FOR DOCUMENTATION PURPOSES ONLY) 
 
 These community ports pioneered multi-runtime support:
 
