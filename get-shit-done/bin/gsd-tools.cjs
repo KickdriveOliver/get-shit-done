@@ -2094,6 +2094,23 @@ function cmdSummaryExtract(cwd, summaryPath, fields, raw) {
   const content = fs.readFileSync(fullPath, 'utf-8');
   const fm = extractFrontmatter(content);
 
+  const extractSummaryOneLiner = (markdown, frontmatter) => {
+    if (frontmatter['one-liner']) return frontmatter['one-liner'];
+
+    const body = markdown.replace(/^---\n[\s\S]+?\n---\s*/, '');
+    for (const line of body.split(/\r?\n/)) {
+      const trimmed = line.trim();
+      if (!trimmed) continue;
+
+      const match = trimmed.match(/^\*\*(.+?)\*\*$/);
+      if (match) {
+        return match[1].trim();
+      }
+    }
+
+    return null;
+  };
+
   // Parse key-decisions into structured format
   const parseDecisions = (decisionsList) => {
     if (!decisionsList || !Array.isArray(decisionsList)) return [];
@@ -2112,7 +2129,7 @@ function cmdSummaryExtract(cwd, summaryPath, fields, raw) {
   // Build full result
   const fullResult = {
     path: summaryPath,
-    one_liner: fm['one-liner'] || null,
+    one_liner: extractSummaryOneLiner(content, fm),
     key_files: fm['key-files'] || [],
     tech_added: (fm['tech-stack'] && fm['tech-stack'].added) || [],
     patterns: fm['patterns-established'] || [],
