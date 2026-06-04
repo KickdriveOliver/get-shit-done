@@ -1,3 +1,23 @@
+# Changelog for GSD-VSCODE variant 
+
+## IMPORTANT NOTE: Only provided for legacy/documentation puprpose, please use the official successor
+GSD Core https://github.com/open-gsd/gsd-core
+
+## [1.20.4.002] - 2026-06-04
+
+### Fixed 
+- Windows / VS Code specific breakage in get-shit-done/bin/gsd-tools.cjs. Updated gsd-tools.test.cjs. 
+
+### Changed 
+- Removed all hints to the now defunct and possibly polluted installation via npx and the original package name. 
+
+
+## [1.20.4.001] - 2026-02-19
+
+### Added
+- initial branch from GSD 1.2.40
+
+
 # Changelog
 
 All notable changes to GSD will be documented in this file.

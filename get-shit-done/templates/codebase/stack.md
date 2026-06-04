@@ -144,11 +144,6 @@ Template for `.planning/codebase/STACK.md` - captures the technology foundation.
 - macOS/Linux/Windows (any platform with Node.js)
 - No external dependencies
 
-**Production:**
-- Distributed as npm package
-- Installed globally via npm install -g
-- Runs on user's Node.js installation
-
 ---
 
 *Stack analysis: 2025-01-20*

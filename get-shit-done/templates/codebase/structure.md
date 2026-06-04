@@ -118,16 +118,16 @@ Template for `.planning/codebase/STRUCTURE.md` - captures physical file organiza
 ```markdown
 # Codebase Structure
 
-**Analysis Date:** 2025-01-20
+**Analysis Date:** 2026-05-03
 
 ## Directory Layout
 
 ```
 get-shit-done/
-├── bin/                # Executable entry points
 ├── commands/           # Slash command definitions
 │   └── gsd/           # GSD-specific commands
 ├── get-shit-done/     # Skill resources
+│   ├── bin/           # Executable entry points
 │   ├── references/    # Principle documents
 │   ├── templates/     # File templates
 │   └── workflows/     # Multi-step procedures
@@ -138,12 +138,6 @@ get-shit-done/
 ```
 
 ## Directory Purposes
-
-**bin/**
-- Purpose: CLI entry points
-- Contains: install.js (installer script)
-- Key files: install.js - handles npx installation
-- Subdirectories: None
 
 **commands/gsd/**
 - Purpose: Slash command definitions for Claude Code
@@ -171,15 +165,9 @@ get-shit-done/
 
 ## Key File Locations
 
-**Entry Points:**
-- `bin/install.js` - Installation script (npx entry)
-
 **Configuration:**
 - `package.json` - Project metadata, dependencies, bin entry
 - `.gitignore` - Excluded files
-
-**Core Logic:**
-- `bin/install.js` - All installation logic (file copying, path replacement)
 
 **Testing:**
 - `tests/` - Test files (if present)
@@ -223,19 +211,16 @@ get-shit-done/
 - Usage: Reference from commands/workflows as needed
 
 **Utilities:**
-- No utilities yet (`install.js` is monolithic)
 - If extracted: `src/utils/`
 
 ## Special Directories
 
 **get-shit-done/**
 - Purpose: Resources installed to ~/.claude/
-- Source: Copied by bin/install.js during installation
 - Committed: Yes (source of truth)
 
 **commands/**
 - Purpose: Slash commands installed to ~/.claude/commands/
-- Source: Copied by bin/install.js during installation
 - Committed: Yes (source of truth)
 
 ---
