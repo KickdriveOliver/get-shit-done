@@ -1072,6 +1072,43 @@ one-liner: Minimal summary
     assert.deepStrictEqual(output.decisions, [], 'decisions defaults to empty');
   });
 
+  test('falls back to the summary body one-liner when frontmatter omits it', () => {
+    const phaseDir = path.join(tmpDir, '.planning', 'phases', '04-api');
+    fs.mkdirSync(phaseDir, { recursive: true });
+
+    fs.writeFileSync(
+      path.join(phaseDir, '04-01-SUMMARY.md'),
+      `---
+phase: 04-api
+plan: "01"
+key-files:
+  created:
+    - src/server.js
+tech-stack:
+  added:
+    - jsonrpcserver
+patterns-established:
+  - Metadata-driven dispatch
+---
+
+# Phase 04 Plan 01 Summary
+
+**Shared runtime/process layer and JSON-RPC server with live parser fixes**
+
+## Performance
+
+- **Duration:** ~55 min
+`
+    );
+
+    const result = runGsdTools('summary-extract .planning/phases/04-api/04-01-SUMMARY.md --fields one_liner,key_files', tmpDir);
+    assert.ok(result.success, `Command failed: ${result.error}`);
+
+    const output = JSON.parse(result.output);
+    assert.strictEqual(output.one_liner, 'Shared runtime/process layer and JSON-RPC server with live parser fixes', 'one_liner extracted from body');
+    assert.deepStrictEqual(output.key_files, { created: ['src/server.js'] }, 'key_files still extracted from frontmatter');
+  });
+
   test('parses key-decisions with rationale', () => {
     const phaseDir = path.join(tmpDir, '.planning', 'phases', '01-foundation');
     fs.mkdirSync(phaseDir, { recursive: true });
@@ -1098,10 +1135,10 @@ key-decisions:
 });
 
 // ─────────────────────────────────────────────────────────────────────────────
-// init --include flag tests
+// init commands tests
 // ─────────────────────────────────────────────────────────────────────────────
 
-describe('init commands with --include flag', () => {
+describe('init commands', () => {
   let tmpDir;
 
   beforeEach(() => {
@@ -1112,127 +1149,110 @@ describe('init commands with --include flag', () => {
     cleanup(tmpDir);
   });
 
-  test('init execute-phase includes state and config content', () => {
+  test('init execute-phase returns file paths', () => {
     const phaseDir = path.join(tmpDir, '.planning', 'phases', '03-api');
     fs.mkdirSync(phaseDir, { recursive: true });
     fs.writeFileSync(path.join(phaseDir, '03-01-PLAN.md'), '# Plan');
-    fs.writeFileSync(
-      path.join(tmpDir, '.planning', 'STATE.md'),
-      '# State\n\n**Current Phase:** 03\n**Status:** In progress'
-    );
-    fs.writeFileSync(
-      path.join(tmpDir, '.planning', 'config.json'),
-      JSON.stringify({ model_profile: 'balanced' })
-    );
-
-    const result = runGsdTools('init execute-phase 03 --include state,config', tmpDir);
-    assert.ok(result.success, `Command failed: ${result.error}`);
-
-    const output = JSON.parse(result.output);
-    assert.ok(output.state_content, 'state_content should be included');
-    assert.ok(output.state_content.includes('Current Phase'), 'state content correct');
-    assert.ok(output.config_content, 'config_content should be included');
-    assert.ok(output.config_content.includes('model_profile'), 'config content correct');
-  });
-
-  test('init execute-phase without --include omits content', () => {
-    const phaseDir = path.join(tmpDir, '.planning', 'phases', '03-api');
-    fs.mkdirSync(phaseDir, { recursive: true });
-    fs.writeFileSync(path.join(phaseDir, '03-01-PLAN.md'), '# Plan');
-    fs.writeFileSync(path.join(tmpDir, '.planning', 'STATE.md'), '# State');
 
     const result = runGsdTools('init execute-phase 03', tmpDir);
     assert.ok(result.success, `Command failed: ${result.error}`);
 
     const output = JSON.parse(result.output);
-    assert.strictEqual(output.state_content, undefined, 'state_content should be omitted');
-    assert.strictEqual(output.config_content, undefined, 'config_content should be omitted');
+    assert.strictEqual(output.state_path, '.planning/STATE.md');
+    assert.strictEqual(output.roadmap_path, '.planning/ROADMAP.md');
+    assert.strictEqual(output.config_path, '.planning/config.json');
   });
 
-  test('init plan-phase includes multiple file contents', () => {
+  test('init plan-phase returns file paths', () => {
     const phaseDir = path.join(tmpDir, '.planning', 'phases', '03-api');
     fs.mkdirSync(phaseDir, { recursive: true });
-    fs.writeFileSync(path.join(tmpDir, '.planning', 'STATE.md'), '# Project State');
-    fs.writeFileSync(path.join(tmpDir, '.planning', 'ROADMAP.md'), '# Roadmap v1.0');
-    fs.writeFileSync(path.join(tmpDir, '.planning', 'REQUIREMENTS.md'), '# Requirements');
     fs.writeFileSync(path.join(phaseDir, '03-CONTEXT.md'), '# Phase Context');
     fs.writeFileSync(path.join(phaseDir, '03-RESEARCH.md'), '# Research Findings');
+    fs.writeFileSync(path.join(phaseDir, '03-VERIFICATION.md'), '# Verification');
+    fs.writeFileSync(path.join(phaseDir, '03-UAT.md'), '# UAT');
 
-    const result = runGsdTools('init plan-phase 03 --include state,roadmap,requirements,context,research', tmpDir);
+    const result = runGsdTools('init plan-phase 03', tmpDir);
     assert.ok(result.success, `Command failed: ${result.error}`);
 
     const output = JSON.parse(result.output);
-    assert.ok(output.state_content, 'state_content included');
-    assert.ok(output.state_content.includes('Project State'), 'state content correct');
-    assert.ok(output.roadmap_content, 'roadmap_content included');
-    assert.ok(output.roadmap_content.includes('Roadmap v1.0'), 'roadmap content correct');
-    assert.ok(output.requirements_content, 'requirements_content included');
-    assert.ok(output.context_content, 'context_content included');
-    assert.ok(output.research_content, 'research_content included');
+    assert.strictEqual(output.state_path, '.planning/STATE.md');
+    assert.strictEqual(output.roadmap_path, '.planning/ROADMAP.md');
+    assert.strictEqual(output.requirements_path, '.planning/REQUIREMENTS.md');
+    assert.strictEqual(output.context_path, '.planning/phases/03-api/03-CONTEXT.md');
+    assert.strictEqual(output.research_path, '.planning/phases/03-api/03-RESEARCH.md');
+    assert.strictEqual(output.verification_path, '.planning/phases/03-api/03-VERIFICATION.md');
+    assert.strictEqual(output.uat_path, '.planning/phases/03-api/03-UAT.md');
   });
 
-  test('init plan-phase includes verification and uat content', () => {
+  test('init progress returns file paths', () => {
+    const result = runGsdTools('init progress', tmpDir);
+    assert.ok(result.success, `Command failed: ${result.error}`);
+
+    const output = JSON.parse(result.output);
+    assert.strictEqual(output.state_path, '.planning/STATE.md');
+    assert.strictEqual(output.roadmap_path, '.planning/ROADMAP.md');
+    assert.strictEqual(output.project_path, '.planning/PROJECT.md');
+    assert.strictEqual(output.config_path, '.planning/config.json');
+  });
+
+  test('init progress returns repo-style phase directories', () => {
     const phaseDir = path.join(tmpDir, '.planning', 'phases', '03-api');
     fs.mkdirSync(phaseDir, { recursive: true });
-    fs.writeFileSync(path.join(phaseDir, '03-VERIFICATION.md'), '# Verification Results');
-    fs.writeFileSync(path.join(phaseDir, '03-UAT.md'), '# UAT Findings');
+    fs.writeFileSync(path.join(phaseDir, '03-01-PLAN.md'), '# Plan');
 
-    const result = runGsdTools('init plan-phase 03 --include verification,uat', tmpDir);
+    const result = runGsdTools('init progress', tmpDir);
     assert.ok(result.success, `Command failed: ${result.error}`);
 
     const output = JSON.parse(result.output);
-    assert.ok(output.verification_content, 'verification_content included');
-    assert.ok(output.verification_content.includes('Verification Results'), 'verification content correct');
-    assert.ok(output.uat_content, 'uat_content included');
-    assert.ok(output.uat_content.includes('UAT Findings'), 'uat content correct');
+    assert.strictEqual(output.phases[0].directory, '.planning/phases/03-api');
   });
 
-  test('init progress includes state, roadmap, project, config', () => {
-    fs.writeFileSync(path.join(tmpDir, '.planning', 'STATE.md'), '# State');
-    fs.writeFileSync(path.join(tmpDir, '.planning', 'ROADMAP.md'), '# Roadmap');
-    fs.writeFileSync(path.join(tmpDir, '.planning', 'PROJECT.md'), '# Project');
+  test('init todos returns repo-style todo paths', () => {
+    const pendingDir = path.join(tmpDir, '.planning', 'todos', 'pending');
+    fs.mkdirSync(pendingDir, { recursive: true });
     fs.writeFileSync(
-      path.join(tmpDir, '.planning', 'config.json'),
-      JSON.stringify({ model_profile: 'quality' })
+      path.join(pendingDir, 'add-dark-mode.md'),
+      `title: Add dark mode\narea: ui\ncreated: 2025-01-01\n`
     );
 
-    const result = runGsdTools('init progress --include state,roadmap,project,config', tmpDir);
+    const result = runGsdTools('init todos', tmpDir);
     assert.ok(result.success, `Command failed: ${result.error}`);
 
     const output = JSON.parse(result.output);
-    assert.ok(output.state_content, 'state_content included');
-    assert.ok(output.roadmap_content, 'roadmap_content included');
-    assert.ok(output.project_content, 'project_content included');
-    assert.ok(output.config_content, 'config_content included');
+    assert.strictEqual(output.todos[0].path, '.planning/todos/pending/add-dark-mode.md');
   });
 
-  test('missing files return null in content fields', () => {
+  test('init phase-op returns core and optional phase file paths', () => {
     const phaseDir = path.join(tmpDir, '.planning', 'phases', '03-api');
     fs.mkdirSync(phaseDir, { recursive: true });
-    fs.writeFileSync(path.join(phaseDir, '03-01-PLAN.md'), '# Plan');
+    fs.writeFileSync(path.join(phaseDir, '03-CONTEXT.md'), '# Phase Context');
+    fs.writeFileSync(path.join(phaseDir, '03-RESEARCH.md'), '# Research');
+    fs.writeFileSync(path.join(phaseDir, '03-VERIFICATION.md'), '# Verification');
+    fs.writeFileSync(path.join(phaseDir, '03-UAT.md'), '# UAT');
 
-    const result = runGsdTools('init execute-phase 03 --include state,config', tmpDir);
+    const result = runGsdTools('init phase-op 03', tmpDir);
     assert.ok(result.success, `Command failed: ${result.error}`);
 
     const output = JSON.parse(result.output);
-    assert.strictEqual(output.state_content, null, 'missing state returns null');
-    assert.strictEqual(output.config_content, null, 'missing config returns null');
+    assert.strictEqual(output.state_path, '.planning/STATE.md');
+    assert.strictEqual(output.roadmap_path, '.planning/ROADMAP.md');
+    assert.strictEqual(output.requirements_path, '.planning/REQUIREMENTS.md');
+    assert.strictEqual(output.context_path, '.planning/phases/03-api/03-CONTEXT.md');
+    assert.strictEqual(output.research_path, '.planning/phases/03-api/03-RESEARCH.md');
+    assert.strictEqual(output.verification_path, '.planning/phases/03-api/03-VERIFICATION.md');
+    assert.strictEqual(output.uat_path, '.planning/phases/03-api/03-UAT.md');
   });
 
-  test('partial includes work correctly', () => {
+  test('init plan-phase omits optional paths if files missing', () => {
     const phaseDir = path.join(tmpDir, '.planning', 'phases', '03-api');
     fs.mkdirSync(phaseDir, { recursive: true });
-    fs.writeFileSync(path.join(phaseDir, '03-01-PLAN.md'), '# Plan');
-    fs.writeFileSync(path.join(tmpDir, '.planning', 'STATE.md'), '# State');
-    fs.writeFileSync(path.join(tmpDir, '.planning', 'ROADMAP.md'), '# Roadmap');
 
-    // Only request state, not roadmap
-    const result = runGsdTools('init execute-phase 03 --include state', tmpDir);
+    const result = runGsdTools('init plan-phase 03', tmpDir);
     assert.ok(result.success, `Command failed: ${result.error}`);
 
     const output = JSON.parse(result.output);
-    assert.ok(output.state_content, 'state_content included');
-    assert.strictEqual(output.roadmap_content, undefined, 'roadmap_content not requested, should be undefined');
+    assert.strictEqual(output.context_path, undefined);
+    assert.strictEqual(output.research_path, undefined);
   });
 });
 
@@ -2275,6 +2295,7 @@ describe('scaffold command', () => {
 
     const output = JSON.parse(result.output);
     assert.strictEqual(output.created, true);
+  assert.strictEqual(output.path, '.planning/phases/03-api/03-CONTEXT.md');
 
     // Verify file content
     const content = fs.readFileSync(
@@ -2325,6 +2346,8 @@ describe('scaffold command', () => {
 
     const output = JSON.parse(result.output);
     assert.strictEqual(output.created, true);
+    assert.strictEqual(output.directory, '.planning/phases/05-user-dashboard');
+    assert.strictEqual(output.path, '.planning/phases/05-user-dashboard');
     assert.ok(
       fs.existsSync(path.join(tmpDir, '.planning', 'phases', '05-user-dashboard')),
       'directory should be created'
@@ -2342,5 +2365,34 @@ describe('scaffold command', () => {
     const output = JSON.parse(result.output);
     assert.strictEqual(output.created, false, 'should not overwrite');
     assert.strictEqual(output.reason, 'already_exists');
+    assert.strictEqual(output.path, '.planning/phases/03-api/03-CONTEXT.md');
+  });
+});
+
+// ─────────────────────────────────────────────────────────────────────────────
+// find-phase command
+// ─────────────────────────────────────────────────────────────────────────────
+
+describe('find-phase command', () => {
+  let tmpDir;
+
+  beforeEach(() => {
+    tmpDir = createTempProject();
+  });
+
+  afterEach(() => {
+    cleanup(tmpDir);
+  });
+
+  test('returns repo-style directory paths', () => {
+    const phaseDir = path.join(tmpDir, '.planning', 'phases', '03-api');
+    fs.mkdirSync(phaseDir, { recursive: true });
+    fs.writeFileSync(path.join(phaseDir, '03-01-PLAN.md'), '# Plan');
+
+    const result = runGsdTools('find-phase 03', tmpDir);
+    assert.ok(result.success, `Command failed: ${result.error}`);
+
+    const output = JSON.parse(result.output);
+    assert.strictEqual(output.directory, '.planning/phases/03-api');
   });
 });

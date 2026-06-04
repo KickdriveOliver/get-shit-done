@@ -248,6 +248,10 @@ function normalizePhaseName(phase) {
   return parts.length > 1 ? `${padded}.${parts[1]}` : padded;
 }
 
+function toRepoPath(filePath) {
+  return filePath ? filePath.replace(/\\/g, '/') : filePath;
+}
+
 function extractFrontmatter(content) {
   const frontmatter = {};
   const match = content.match(/^---\n([\s\S]+?)\n---/);
@@ -548,7 +552,7 @@ function cmdListTodos(cwd, area, raw) {
           created: createdMatch ? createdMatch[1].trim() : 'unknown',
           title: titleMatch ? titleMatch[1].trim() : 'Untitled',
           area: todoArea,
-          path: path.join('.planning', 'todos', 'pending', file),
+          path: toRepoPath(path.join('.planning', 'todos', 'pending', file)),
         });
       } catch {}
     }
@@ -1475,7 +1479,7 @@ function cmdFindPhase(cwd, phase, raw) {
 
     const result = {
       found: true,
-      directory: path.join('.planning', 'phases', match),
+      directory: toRepoPath(path.join('.planning', 'phases', match)),
       phase_number: phaseNumber,
       phase_name: phaseName,
       plans,
@@ -1835,12 +1839,12 @@ function cmdTemplateFill(cwd, templateType, options, raw) {
   const outPath = path.join(cwd, phaseInfo.directory, fileName);
 
   if (fs.existsSync(outPath)) {
-    output({ error: 'File already exists', path: path.relative(cwd, outPath) }, raw);
+    output({ error: 'File already exists', path: toRepoPath(path.relative(cwd, outPath)) }, raw);
     return;
   }
 
   fs.writeFileSync(outPath, fullContent, 'utf-8');
-  const relPath = path.relative(cwd, outPath);
+  const relPath = toRepoPath(path.relative(cwd, outPath));
   output({ created: true, path: relPath, template: templateType }, raw, relPath);
 }
 
@@ -2032,7 +2036,7 @@ function cmdStateSnapshot(cwd, raw) {
 
   // Extract blockers list
   const blockers = [];
-  const blockersMatch = content.match(/###+\s*Blockers(?:\/Concerns)?\s*\n([\s\S]*?)(?=\n##|$)/i);
+  const blockersMatch = content.match(/##+\s*Blockers(?:\/Concerns)?\s*\n([\s\S]*?)(?=\n##|$)/i);
   if (blockersMatch) {
     const blockersSection = blockersMatch[1];
     const items = blockersSection.match(/^-\s+(.+)$/gm) || [];
@@ -2685,7 +2689,6 @@ function cmdRoadmapAnalyze(cwd, raw) {
   const missingDetails = [...checklistPhases].filter(p => !detailPhases.has(p));
 
   const planPercent = totalPlans > 0 ? Math.round((totalSummaries / totalPlans) * 100) : 0;
-  const phasePercent = phases.length > 0 ? Math.round((completedPhases / phases.length) * 100) : planPercent;
 
   const result = {
     milestones,
@@ -2695,7 +2698,7 @@ function cmdRoadmapAnalyze(cwd, raw) {
     total_plans: totalPlans,
     total_summaries: totalSummaries,
     plan_percent: planPercent,
-    progress_percent: phasePercent,
+    progress_percent: planPercent,
     current_phase: currentPhase ? currentPhase.number : null,
     next_phase: nextPhase ? nextPhase.number : null,
     missing_phase_details: missingDetails.length > 0 ? missingDetails : null,
@@ -4091,7 +4094,8 @@ function cmdScaffold(cwd, type, options, raw) {
       fs.mkdirSync(phasesParent, { recursive: true });
       const dirPath = path.join(phasesParent, dirName);
       fs.mkdirSync(dirPath, { recursive: true });
-      output({ created: true, directory: `.planning/phases/${dirName}`, path: dirPath }, raw, dirPath);
+      const repoDirPath = toRepoPath(path.relative(cwd, dirPath));
+      output({ created: true, directory: `.planning/phases/${dirName}`, path: repoDirPath }, raw, dirPath);
       return;
     }
     default:
@@ -4099,12 +4103,12 @@ function cmdScaffold(cwd, type, options, raw) {
   }
 
   if (fs.existsSync(filePath)) {
-    output({ created: false, reason: 'already_exists', path: filePath }, raw, 'exists');
+    output({ created: false, reason: 'already_exists', path: toRepoPath(path.relative(cwd, filePath)) }, raw, 'exists');
     return;
   }
 
   fs.writeFileSync(filePath, content, 'utf-8');
-  const relPath = path.relative(cwd, filePath);
+  const relPath = toRepoPath(path.relative(cwd, filePath));
   output({ created: true, path: relPath }, raw, relPath);
 }
 
@@ -4152,7 +4156,7 @@ function getArchivedPhaseDirs(cwd) {
         results.push({
           name: dir,
           milestone: version,
-          basePath: path.join('.planning', 'milestones', archiveName),
+          basePath: toRepoPath(path.join('.planning', 'milestones', archiveName)),
           fullPath: path.join(archivePath, dir),
         });
       }
@@ -4191,7 +4195,7 @@ function searchPhaseInDir(baseDir, relBase, normalized) {
 
     return {
       found: true,
-      directory: path.join(relBase, match),
+      directory: toRepoPath(path.join(relBase, match)),
       phase_number: phaseNumber,
       phase_name: phaseName,
       phase_slug: phaseName ? phaseName.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-+|-+$/g, '') : null,
@@ -4422,19 +4426,19 @@ function cmdInitPlanPhase(cwd, phase, raw) {
       const files = fs.readdirSync(phaseDirFull);
       const contextFile = files.find(f => f.endsWith('-CONTEXT.md') || f === 'CONTEXT.md');
       if (contextFile) {
-        result.context_path = path.join(phaseInfo.directory, contextFile);
+        result.context_path = toRepoPath(path.join(phaseInfo.directory, contextFile));
       }
       const researchFile = files.find(f => f.endsWith('-RESEARCH.md') || f === 'RESEARCH.md');
       if (researchFile) {
-        result.research_path = path.join(phaseInfo.directory, researchFile);
+        result.research_path = toRepoPath(path.join(phaseInfo.directory, researchFile));
       }
       const verificationFile = files.find(f => f.endsWith('-VERIFICATION.md') || f === 'VERIFICATION.md');
       if (verificationFile) {
-        result.verification_path = path.join(phaseInfo.directory, verificationFile);
+        result.verification_path = toRepoPath(path.join(phaseInfo.directory, verificationFile));
       }
       const uatFile = files.find(f => f.endsWith('-UAT.md') || f === 'UAT.md');
       if (uatFile) {
-        result.uat_path = path.join(phaseInfo.directory, uatFile);
+        result.uat_path = toRepoPath(path.join(phaseInfo.directory, uatFile));
       }
     } catch {}
   }
@@ -4705,19 +4709,19 @@ function cmdInitPhaseOp(cwd, phase, raw) {
       const files = fs.readdirSync(phaseDirFull);
       const contextFile = files.find(f => f.endsWith('-CONTEXT.md') || f === 'CONTEXT.md');
       if (contextFile) {
-        result.context_path = path.join(phaseInfo.directory, contextFile);
+        result.context_path = toRepoPath(path.join(phaseInfo.directory, contextFile));
       }
       const researchFile = files.find(f => f.endsWith('-RESEARCH.md') || f === 'RESEARCH.md');
       if (researchFile) {
-        result.research_path = path.join(phaseInfo.directory, researchFile);
+        result.research_path = toRepoPath(path.join(phaseInfo.directory, researchFile));
       }
       const verificationFile = files.find(f => f.endsWith('-VERIFICATION.md') || f === 'VERIFICATION.md');
       if (verificationFile) {
-        result.verification_path = path.join(phaseInfo.directory, verificationFile);
+        result.verification_path = toRepoPath(path.join(phaseInfo.directory, verificationFile));
       }
       const uatFile = files.find(f => f.endsWith('-UAT.md') || f === 'UAT.md');
       if (uatFile) {
-        result.uat_path = path.join(phaseInfo.directory, uatFile);
+        result.uat_path = toRepoPath(path.join(phaseInfo.directory, uatFile));
       }
     } catch {}
   }
@@ -4752,7 +4756,7 @@ function cmdInitTodos(cwd, area, raw) {
           created: createdMatch ? createdMatch[1].trim() : 'unknown',
           title: titleMatch ? titleMatch[1].trim() : 'Untitled',
           area: todoArea,
-          path: path.join('.planning', 'todos', 'pending', file),
+          path: toRepoPath(path.join('.planning', 'todos', 'pending', file)),
         });
       } catch {}
     }
@@ -4912,7 +4916,7 @@ function cmdInitProgress(cwd, raw) {
       const phaseInfo = {
         number: phaseNumber,
         name: phaseName,
-        directory: path.join('.planning', 'phases', dir),
+        directory: toRepoPath(path.join('.planning', 'phases', dir)),
         status,
         plan_count: plans.length,
         summary_count: summaries.length,
